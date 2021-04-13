@@ -164,6 +164,15 @@
         <input type="file" id="fileInput" STYLE="background-color: #FF6600;">
       </div>
       <div id="messageDisplayArea"></div>
+
+      <canvas id="newCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas>
+	<script> /* This script initiates the canvas and puts the text on the canvas "newCanvas" */
+        var canvas1 = document.getElementById('newCanvas');
+        var context1 = canvas1.getContext("2d");
+        context1.font = '20pt Calibri';
+        context1.fillStyle = "black";
+        context1.fillText("Your image will display here", 10, 20);
+      </script>
       
       <canvas id="myCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas>
       <script> /* This script initiates the cavas and puts the text on the canvas "myCanvas" */
@@ -174,14 +183,6 @@
         context.fillText("Original image will go here", 10, 20);
       </script>
 
-      <canvas id="newCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas>
-	<script> /* This script initiates the canvas and puts the text on the canvas "newCanvas" */
-        var canvas1 = document.getElementById('newCanvas');
-        var context1 = canvas1.getContext("2d");
-        context1.font = '20pt Calibri';
-        context1.fillStyle = "black";
-        context1.fillText("Your image will display here", 10, 20);
-      </script>
 
     </div><!-- /content -->
     <div data-role="footer" data-position="fixed">
