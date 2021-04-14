@@ -14,7 +14,7 @@
  
   Authors in chronological order of contribution:
   Author 1: Timothy E. Riedel
-  Author 2:
+  Author 2: Daniel Fan 
   
   References:
   http://docs.webplatform.org/wiki/concepts/programming/drawing_images_onto_canvas#Loading_the_image_programmatically
@@ -24,10 +24,12 @@
   http://stackoverflow.com/questions/11929099/html5-canvas-drawimage-ratio-bug-ios
   
   Brief Description of Goal of Code:
-  blah, blah, blah,
+  Be able to have a user submit a picture that would be processed in 2 canvases, one displaying the original picture and one showing 
+  the picture that had all the red and green (RB of RGB removed) to display only blue tints.
  
   Known Issues:
-  blah, blah, blah, blah
+  The cropping of the picture, because of set height and width of the canvas, is a bit "squashed" when a vertical photo is uploaded from a 
+  mobile iOS device. On PC it works fine with the picture scaling and cropping perfectly, just not on mobile. 
 -->
 
  <head>
@@ -107,8 +109,7 @@
           
           /*This finally draws the image onto the first drawing canvas. The specific canvas is referred to by "context". This is established down in the HTML part of the file just under the first <canvas> tag. If we weren't worried about fixing an iPhone bug we would use context.drawImage(image, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500) instead of drawImageIOSFix */
         
-          drawImageIOSFix(context,img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
-
+        drawImageIOSFix(context,img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500); 
 	var img1 = new Image();
 	img1 = img;
         drawImageIOSFix(context1,img1, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
@@ -124,17 +125,7 @@
 	data[i] *= 0;
 	data[i+1] *= 0;
         }
-        context.putImageData(imageData,0,0);
-/*	
-	var img2 = new Image();
-	img2 = img;
-        drawImageIOSFix(context1,img2, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);*/
-
- 
-          
-          
-          
-          
+        context.putImageData(imageData,0,0);     
           
         } // end of img.onload
         
@@ -171,7 +162,7 @@
         var context1 = canvas1.getContext("2d");
         context1.font = '20pt Calibri';
         context1.fillStyle = "black";
-        context1.fillText("Your image will display here", 10, 20);
+        context1.fillText("Original image will go here", 10, 20);
       </script>
       
       <canvas id="myCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas>
@@ -180,7 +171,7 @@
         var context = canvas.getContext("2d");
         context.font = '20pt Calibri';
         context.fillStyle = "black";
-        context.fillText("Original image will go here", 10, 20);
+        context.fillText("Your image will display here", 10, 20);
       </script>
 
 
