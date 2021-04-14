@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 
 <!-- The following code has been developed by students and/or researchers of the Freshman Research Initiative, DIY Diagnostics Stream at The University of Texas at Austin.  This code is shared for demonstration purposes and should not be considered a product -- it is for entertainment purposes only.  Any user of this code does so at their own risk. Members of the DIY Stream, FRI, and The University of Texas system are not liable for anything related to this code.
@@ -109,23 +109,39 @@
           
           /*This finally draws the image onto the first drawing canvas. The specific canvas is referred to by "context". This is established down in the HTML part of the file just under the first <canvas> tag. If we weren't worried about fixing an iPhone bug we would use context.drawImage(image, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500) instead of drawImageIOSFix */
         
-        drawImageIOSFix(context,img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500); 
-	var img1 = new Image();
-	img1 = img;
-        drawImageIOSFix(context1,img1, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
+        drawImageIOSFix(context,img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500); //this draws the image that was uploaded by the user in myCanvas 
+	var img1 = new Image(); // this creates a new image that can be manipulatable so that the original image stays intact
+	img1 = img; // this sets the values of the original image within the new, manipulatable image 
+        drawImageIOSFix(context1,img1, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500); //this draws the new image that can be processed in newCanvas that will display a bluescale 
 
           /*  +++++++++++++++ BEGIN IMAGE PROCESSING +++++++++++++++ */
           /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
           /* PUT ANY CHANGES TO THE JAVASCRIPT HERE  */
-        var imageData = context1.getImageData(0,0,img1.naturalWidth, img1.naturalHeight);
-        var data = imageData.data;
+
+          /* Below are my changes to the code that was not in the forked version   */
+       
+        var imageData = context1.getImageData(0,0,img1.naturalWidth, img1.naturalHeight); 
+          /* This creates a variable that stores the image data (RBG values) of each pixel of the image of the newCanvas. 
+          This is done by setting the 4 required parameters of the getImageData method to start at (0,0) of 
+	  the 2D coordinate system and ending at whatever is specified in the values of img1.naturalWidth and 
+	  img.naturalHeight*/
+
+        var data = imageData.data; //this stores the values obtained by the variable imageData obtained thru the getImageData in a manipulatable array
 	
-	for(var i =0, n = data.length; i <= n; i+= 4) {
-	data[i] *= 0;
-	data[i+1] *= 0;
+	for(var i =0, n = data.length; i <= n; i+= 4) { 
+
+	/*this creates a for loop where it iterates between every 4 values. The reason for this iteration is because the getImageData method that obtains 
+	image data stores the RGB values in sets of 4. The first value would be for red, the second would be for green, the third would be for blue and the 
+	last would be for alpha (not rlly important for this demonstration. The goal of this loop is to use the variable i initiated by the for loop to change 
+	the values for each RGB pixel of the image and change the red and green colors to be set to 0 and just maintaining the blue value, effectively 
+	blue tinting the picture. */
+
+	      data[i] *= 0; //this sets the red value of each image pixel to be 0, eliminating any red tint for the image
+	      data[i+1] *= 0; //this sets the green value of each image pixel to be 0, eliminating any green tint for the image
         }
-        context.putImageData(imageData,0,0);     
+
+        context1.putImageData(imageData,0,0); 
+	// this uses the putImageData method to set the image data from newCanvas to be equal to the manipulated data from the for loop above 
           
         } // end of img.onload
         
@@ -152,28 +168,27 @@
       <h2>Push button to take picture.</h2>
       <div>
         Press orange button to create or choose image file:
-        <input type="file" id="fileInput" STYLE="background-color: #FF6600;">
+        <input type="file" id="fileInput" STYLE="background-color: #FF6600;"> <!-- this initates an input element that allows the user to upload a file (allowed and specified by type= "file") which would become an image with the ID of fileInput to where the JS portion of the code can store the inputed image -->
       </div>
-      <div id="messageDisplayArea"></div>
+      <div id="messageDisplayArea"></div> <!-- this defined a division to which can display the text for whether the user-uploaded file is supported or not -->
 
-      <canvas id="newCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas>
+      <canvas id="myCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas> <!-- this defines the canvas HTML element to which the original uploaded image will be displayed -->
+      <script> /* This script initiates the canvas and puts the text on the canvas "myCanvas" */
+        var canvas = document.getElementById('myCanvas'); //this creates a canvas variable that retrieves the canvas element created below that matches the ID "myCanvas" from the DOM 
+        var context = canvas.getContext("2d");  //this creates a variable that uses the getContext() method and sets the 2D context of the canvas element (retrieved through the canvas variable) that basically allows for mehtods and properties to be applied to the canvas element. the "2d" part specifies a x,y cartisian coordinate system 
+        context.font = '20pt Calibri'; // this sets the canvas font to be 20pt Calibri
+        context.fillStyle = "black"; // this sets the color of the displayed elements (the text below) to be black
+        context.fillText("Orignal image will display here", 10, 20); // this allows the canvas to display text using the fillText method 
+      </script>
+
+      <canvas id="newCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas> <!-- this defines the canvas HTML element to which the manipulated, blue-scaled image will be displayed -->
 	<script> /* This script initiates the canvas and puts the text on the canvas "newCanvas" */
-        var canvas1 = document.getElementById('newCanvas');
-        var context1 = canvas1.getContext("2d");
-        context1.font = '20pt Calibri';
-        context1.fillStyle = "black";
-        context1.fillText("Original image will go here", 10, 20);
+        var canvas1 = document.getElementById('newCanvas'); // refer to the comments made above to understand what this does, sets variable to retrieve the newCanvas element 
+        var context1 = canvas1.getContext("2d"); //refer to the comments made above to understand what this does, sets context variable to 2D and specify a 2D coordinate system
+        context1.font = '20pt Calibri'; //refer to the comments made above to understand what this does, sets font 
+        context1.fillStyle = "black"; // refer to the comments made above to understand what this does, sets font "color" 
+        context1.fillText("Your image will display here", 10, 20); // refer to the comments made above to understand what this does, displays text in canvas 
       </script>
-      
-      <canvas id="myCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas>
-      <script> /* This script initiates the cavas and puts the text on the canvas "myCanvas" */
-        var canvas = document.getElementById('myCanvas');
-        var context = canvas.getContext("2d");
-        context.font = '20pt Calibri';
-        context.fillStyle = "black";
-        context.fillText("Your image will display here", 10, 20);
-      </script>
-
 
     </div><!-- /content -->
     <div data-role="footer" data-position="fixed">
