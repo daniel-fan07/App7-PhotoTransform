@@ -1,197 +1,96 @@
-!DOCTYPE html>
-<html lang="en">
-
-<!-- The following code has been developed by students and/or researchers of the Freshman Research Initiative, DIY Diagnostics Stream at The University of Texas at Austin.  This code is shared for demonstration purposes and should not be considered a product -- it is for entertainment purposes only.  Any user of this code does so at their own risk. Members of the DIY Stream, FRI, and The University of Texas system are not liable for anything related to this code.
+<!DOCTYPE html> 
+<html> 
+<!-- The following code has been developed by students and/or researchers of the Freshman Research Initiative DIY Diagnostics Stream at The University of Texas at Austin.  This code is shared for demonstration purposes and should not be considered a product -- it is for entertainment purposes only.  Any user of this code does so at their own risk. Members of the DIY Stream, FRI, and The University of Texas system are not liable for anything related to this code.
  
-  THIS CODE SHOULD NOT BE USED TO DIAGNOSE ANY KIND OF MEDICAL CONDITION.
- 
-  Further Information:
-  http://cns.utexas.edu/fri
- 
-  Research Educator:
-  Timothy E. Riedel
-  triedel@utexas.edu
- 
-  Authors in chronological order of contribution:
-  Author 1: Timothy E. Riedel
-  Author 2: Daniel Fan 
-  
-  References:
-  http://docs.webplatform.org/wiki/concepts/programming/drawing_images_onto_canvas#Loading_the_image_programmatically
-  http://www.html5rocks.com/en/tutorials/file/dndfiles/
-  http://www.w3.org/TR/FileAPI/
-  http://mobilehtml5.org/
-  http://stackoverflow.com/questions/11929099/html5-canvas-drawimage-ratio-bug-ios
-  
-  Brief Description of Goal of Code:
-  Be able to have a user submit a picture that would be processed in 2 canvases, one displaying the original picture and one showing 
-  the picture that had all the red and green (RB of RGB removed) to display only blue tints.
- 
-  Known Issues:
-  The cropping of the picture, because of set height and width of the canvas, is a bit "squashed" when a vertical photo is uploaded from a 
-  mobile iOS device. On PC it works fine with the picture scaling and cropping perfectly, just not on mobile. 
--->
-<head>
-	<meta charset="utf-8">
-	<title>Photo Transform</title>
-	<meta name="viewport" content="width=device-width, initial-scale=.7">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
-	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script src="https://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
-
+THIS CODE SHOULD NOT BE USED TO DIAGNOSE ANY KIND OF MEDICAL CONDITION. -->
+  <head> 
+      <title>App6---HTML5-Canvas</title>  
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <link rel="stylesheet" href="w3.css">
+      <link rel="stylesheet" href="w3-colors-flat.css">
+   </head> 
 <script>
-	var docMod = document.lastModified; // gets last modified date and time of the index.html file
-	console.log("This file last modified  " + docMod); // displays last modified date and time in the javascipt browser console 
 
-	/* detectVerticalSquash & drawImageIOSFix = are functions that are critical due to a flaw in the iPhone camera software that squishes any photos displayed on an HTML5 canvas element. https://github.com/stomita/ios-imagefile-megapixel
-	*/
- function detectVerticalSquash(img) {
-  	var iw = img.naturalWidth, ih = img.naturalHeight;
-  	var canvas = document.createElement('canvas');
-  	canvas.width = 1;
-  	canvas.height = ih;
-  	var ctx = canvas.getContext('2d');
-  	ctx.drawImage(img, 0, 0);
-  	var data = ctx.getImageData(0, 0, 1, ih).data;
-  	var sy = 0;
-  	var ey = ih;
-  	var py = ih;
-  	while (py > sy) {
-   	var alpha = data[(py - 1) * 4 + 3];
-   		if (alpha === 0) {
-    		ey = py;
-        } 
-   	else {
-    		sy = py;
-   	}
-   	py = (ey + sy) >> 1;
-  	}
-  var ratio = (py / ih);
-  	return (ratio===0)?1:ratio;
- }
+//	var docMod = document.lastModified; // loads last modified time stamp into docMod variable
+//	alert("This file last modified " + docMod); // generates alert box with time stamp. If annoying, comment out this entire line.
+//	console.log("This file last modified " + docMod); // generates message in javaScript console (found in developers tools) with time stamp. 
 
- function drawImageIOSFix(ctx, img, sx, sy, sw, sh, dx, dy, dw, dh) {
-  	var vertSquashRatio = detectVerticalSquash(img);
-  	ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh / vertSquashRatio);
- }
+	function drawRectangle() { // this creates a function that draws a rectangle on the HTML canvas element 
+		var aRectangle = document.getElementById("a"); //this creates a variable that retrieves the canvas element created below that matches the ID "a" from the DOM 
+		var aContext = aRectangle.getContext("2d"); //this creates a variable that uses the getContext() method and sets the 2D context of the canvas element (retrieved through the aRectangle variable) that basically allows for more methods and properties (like fillRect, fillStyle, beginPath etc) to be "drawn" and applied to the canvas element. the "2d" part specifies a x,y cartisian coordinate system 
+		aContext.fillRect(100,100,75,100); // this uses the aContext variable to call the fillRect() method that draws a rectangle at (100,100) of the canvas coordinate system (x=100, y=100), specified by the first 2 numbers of the method. The next two numbers specify the width (which is set to 75 pixels) and the height (which is 100 pixels)  
+	}
 
-/* window.onload necessary to keep javascripts from running before the app gets a chance to load entirely. */
+	function drawName() { // this creates a function that prints my name as text on the HTML canvas element 
+		var aName = document.getElementById("a"); //reference the comment with this code under the drawRectangle function
+		var aContext = aName.getContext("2d"); //reference the comment with this code under the drawRectangle function
+		aContext.font = "bold 24px sans-serif"; //this sets the font style to 24 pixels, bolden, san-serif letters. This uses CSS code as its guidelines to setting text styles
+		aContext.fillText("Daniel Fan", 150, 200); //this uses the aContext variable to call the fillText() method to display the intended string ("Daniel Fan") at x=150 and y=200 of the canvas coordinate system. The text displayed will be in the style of the elements defined above 
+	}
+	function getPicture() { // this creates a function that displays a picture on the HTML canvas element specified by a URL 
+		var aPicture = document.getElementById("a"); //reference the comment with this code under the drawRectangle function
+		var aContext = aPicture.getContext("2d"); //reference the comment with this code under the drawRectangle function
+		var newImage = new Image(); // this creates a new varaible that defines an JS image element under newImage
+		newImage.src = "https://i.ytimg.com/vi/MPV2METPeJU/maxresdefault.jpg" // this sets the source of the image variable to be retrived from the specified URL jpg 
+		aContext.drawImage(newImage, 20, 20, 192, 108); // this uses the aContext variable to call the drawImage() method that displays the image specified by the newImage variable at x=20 and y=20. The next two numbers serve to scale the image and define the width(192 pixels) and the height (108 pixels)
+	}
 
- window.onload = function() {
-  	var fileInput = document.getElementById('fileInput');
-  	var messageDisplayArea = document.getElementById('messageDisplayArea');
+	function clearCanvas () { //this creates a function that clears all the canvas properties laid on by previous functions 
+		var aPicture = document.getElementById("a"); //reference the comment with this code under the drawRectangle function
+		var aContext = aPicture.getContext("2d"); //reference the comment with this code under the drawRectangle function
+		aContext.clearRect(0, 0, aPicture.width, aPicture.height); // this uses the clearRect() method to effectively create a rectangle to which the pixels inside are cleared within. the first 2 numbers specify where the "rectangle" starts drawing to clear and the last 2 properties use the .length property to get the pixel dimensions of the canvas element to effectively clear the whole canvas. alternatively I can also just specific the width and length used when creating the canvas element 
+	}
 
-  /* fileInput.addEventListener looks for any change in the <input> tag indicating that the user has selected a file (picture). */
+</script>
 
-  fileInput.addEventListener('change', function(e) {
-    	var file = fileInput.files[0];
-    	var imageType = /image.*/;
 
-    /* if (file.type.match(imageType)) checks that the selected file is indeed an image. */
 
-    	if (file.type.match(imageType)) {
+<style>	
+.body {
+     margin: 0em;
+}
+.page {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: -100vw;
+    overflow-y: auto;
+    z-index: 0;
+    background-color: hsl(0,0%,100%);
+}
+  .page:target {
+    left: 0vw;
+    z-index: 1;
+}
+</style>
 
-      /* new FileReader(); and reader.onload start some kind of file reading process in javaScript. I do not understand why this is necessary although it may simply slow things down to let the image load. */
-      
-      	var reader = new FileReader();
-      	reader.onload = function(e) {
-       
-        /* messageDisplayArea.innerHTML not needed but allows you to send a message at this point in the program. */
-        
-        messageDisplayArea.innerHTML = "You picked an image!";
-        
-        /* new Image() and img.onload start some kind of new image creation process in javaScript. I do not understand why this is necessary although it may simply slow things down to let the image load. */
-        
-        var img = new Image();
-        img.onload = function() {
-          
-          /*This finally draws the image onto the first drawing canvas. The specific canvas is referred to by "context". This is established down in the HTML part of the file just under the first <canvas> tag. If we weren't worried about fixing an iPhone bug we would use context.drawImage(image, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500) instead of drawImageIOSFix */
-        
-        drawImageIOSFix(context,img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500); //this draws the image that was uploaded by the user in myCanvas 
-	var img1 = new Image(); // this creates a new image that can be manipulatable so that the original image stays intact
-	img1 = img; // this sets the values of the original image within the new, manipulatable image 
-        drawImageIOSFix(context1,img1, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500); //this draws the new image that can be processed in newCanvas that will display a bluescale 
+<body>
+<div id="header" class="w3-container w3-flat-carrot">
+	<h1>App6---HTML5-Canvas</h1>
+</div>
+<div id="content" class="w3-container">
 
-          /*  +++++++++++++++ BEGIN IMAGE PROCESSING +++++++++++++++ */
-          /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-          /* PUT ANY CHANGES TO THE JAVASCRIPT HERE  */
+	<p>The following code has been developed by students and/or researchers of the Freshman Research Initiative DIY Diagnostics Stream at The University of Texas at 		Austin.  This code is shared for demonstration purposes and should not be considered a product -- it is for entertainment purposes only. Any user of this code 			does so at their own risk. Members of the DIY Stream, FRI, and The University of Texas system are not liable for anything related to this code.</p>
 
-          /* Below are my changes to the code that was not in the forked version   */
-       
-        var imageData = context1.getImageData(0,0,img1.naturalWidth, img1.naturalHeight); 
-          /* This creates a variable that stores the image data (RBG values) of each pixel of the image of the newCanvas. 
-          This is done by setting the 4 required parameters of the getImageData method to start at (0,0) of 
-	  the 2D coordinate system and ending at whatever is specified in the values of img1.naturalWidth and 
-	  img.naturalHeight*/
+	<p>THIS CODE SHOULD NOT BE USED TO DIAGNOSE ANY KIND OF MEDICAL CONDITION.</p>
+</div>
 
-        var data = imageData.data; //this stores the values obtained by the variable imageData obtained thru the getImageData in a manipulatable array
-	
-	for(var i =0, n = data.length; i <= n; i+= 4) { 
+<div>
+	<canvas id = "a" width = "400" height = "400" class="clear" style= "border:1px solid;float:center"></canvas> <!-- I created a canvas element. within the element, I included an ID attribute to which allows this specific canvas element to be accessed from the DOM in various portions of the code (which will be very needed in the JS part of this code). I also specified its width and height to be both 400. The string of attributes after style specifies a solid border that surrounds the perimeter of the border so that the canvas is not just blank in the final version of the code-->
+</div>
 
-	/*this creates a for loop where it iterates between every 4 values. The reason for this iteration is because the getImageData method that obtains 
-	image data stores the RGB values in sets of 4. The first value would be for red, the second would be for green, the third would be for blue and the 
-	last would be for alpha (not rlly important for this demonstration. The goal of this loop is to use the variable i initiated by the for loop to change 
-	the values for each RGB pixel of the image and change the red and green colors to be set to 0 and just maintaining the blue value, effectively 
-	blue tinting the picture. */
+<div>
+		<a onclick = "drawRectangle();" class="w3-btn w3-grey w3-round">Draw Rectangle</a> <!- this creates a button (saying "Draw Rectangle") that, when pressed executes the drawRectangle() function on the JS portion of the code, which creates a rectangle on the canvas -> 
+		<a onclick = "drawName();" class="w3-btn w3-grey w3-round">Draw Name</a> <!- this creates a button (saying "Draw Name") that, when pressed executes the drawName() function on the JS portion of the code, which prints my name in text on the canvas   ->
+		<a onclick = "getPicture();" class="w3-btn w3-grey w3-round">Picture</a> <!- this creates a button (saying "Picture") that, when pressed executes the getPicture() function on the JS portion of the code, which prints a picture on the canvas ->
+		<a onclick = "clearCanvas();" class="w3-btn w3-grey w3-round">Clear</a> <!- this creates a button (saying "Clear") that, when pressed executes the clearCanvas() function on the JS portion of the code, which clears the canvas ->
+</div>
 
-	      data[i] *= 0; //this sets the red value of each image pixel to be 0, eliminating any red tint for the image
-	      data[i+1] *= 0; //this sets the green value of each image pixel to be 0, eliminating any green tint for the image
-        }
+<footer class="w3-bottom w3-container w3-flat-carrot">
+	<p>DIY!</p>
+</footer>
 
-        context1.putImageData(imageData,0,0); 
-	// this uses the putImageData method to set the image data from newCanvas to be equal to the manipulated data from the for loop above 
-          
-        } // end of img.onload
-        
-        img.src = reader.result;
-      } //  end of reader.onload
-      
-      	reader.readAsDataURL(file);
-    } // end of the if statement checking that file is an image
-    	else
-    {
-      // this is what happens if the orignial file selected is not an image file
-     	messageDisplayArea.innerHTML = "File not supported!"
-    } // end of the else statement if file in NOT an image
-  }); // end of the fileInput.addEventListener function
- } // end of the window.onload function
- </script>
- </head>
-
- <body>
- <div data-role="page">
-    <div data-role="header">
-    <h1>Primary Colors</h1></div><!-- /header -->
-    <div data-role="content">	
-      	<h2>Push button to take picture.</h2>
-      	<div>
-        Press orange button to create or choose image file:
-        <input type="file" id="fileInput" STYLE="background-color: #FF6600;"> <!-- this initates an input element that allows the user to upload a file (allowed and specified by type= "file") which would become an image with the ID of fileInput to where the JS portion of the code can store the inputed image -->
-      	</div>
-      	<div id="messageDisplayArea"></div> <!-- this defined a division to which can display the text for whether the user-uploaded file is supported or not -->
-
-<canvas id="myCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas> <!-- this defines the canvas HTML element to which the original uploaded image will be displayed -->
-	<script> /* This script initiates the canvas and puts the text on the canvas "myCanvas" */
-        	var canvas = document.getElementById('myCanvas'); //this creates a canvas variable that retrieves the canvas element created below that matches the ID "myCanvas" from the DOM 
-        	var context = canvas.getContext("2d");  //this creates a variable that uses the getContext() method and sets the 2D context of the canvas element (retrieved through the canvas variable) that basically allows for mehtods and properties to be applied to the canvas element. the "2d" part specifies a x,y cartisian coordinate system 
-        	context.font = '20pt Calibri'; // this sets the canvas font to be 20pt Calibri
-        	context.fillStyle = "black"; // this sets the color of the displayed elements (the text below) to be black
-        	context.fillText("Orignal image will display here", 10, 20); // this allows the canvas to display text using the fillText method 
-        </script>
-
-<canvas id="newCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas> <!-- this defines the canvas HTML element to which the manipulated, blue-scaled image will be displayed -->
-	<script> /* This script initiates the canvas and puts the text on the canvas "newCanvas" */
-        	var canvas1 = document.getElementById('newCanvas'); // refer to the comments made above to understand what this does, sets variable to retrieve the newCanvas element 
-        	var context1 = canvas1.getContext("2d"); //refer to the comments made above to understand what this does, sets context variable to 2D and specify a 2D coordinate system
-        	context1.font = '20pt Calibri'; //refer to the comments made above to understand what this does, sets font 
-        	context1.fillStyle = "black"; // refer to the comments made above to understand what this does, sets font "color" 
-        	context1.fillText("Your image will display here", 10, 20); // refer to the comments made above to understand what this does, displays text in canvas 
-        </script>
-
-    </div><!-- /content -->
-    <div data-role="footer" data-position="fixed">
-       <p>DIY Diagnostics</p>
-    </div><!-- /footer -->
-  </div><!-- /page -->
- </body>
+</body>
+</html>
